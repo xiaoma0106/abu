@@ -8,7 +8,8 @@ from __future__ import print_function
 from __future__ import division
 
 import glob
-import imghdr
+# import imghdr
+import filetype
 import os
 
 import PIL.Image
@@ -31,6 +32,12 @@ __weixin__ = 'abu_quant'
 # 为了im.convert('RGB')的异常错误，需要设置ImageFile.LOAD_TRUNCATED_IMAGES = True
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+# 由于python3.13版本不存在imghdr,使用filetype替换imghdr
+def detect_image_type(file_path):
+    kind = filetype.guess(file_path)
+    if kind is None:
+        return None
+    return kind.extension
 
 def std_img_from_root_dir(root_dir, a_ext):
     """
@@ -106,8 +113,9 @@ def change_to_real_type(img_list):
             # 过滤实际不存在的文件
             continue
 
-        # 使用imghdr识别图像真实类型
-        real_type = imghdr.what(img)
+        # 使用idetect_image_type替换mghdr识别图像真实类型
+        # real_type = imghdr.what(img)
+        real_type = detect_image_type(img)
         # 将img_list有的类型做记录，add到集合中
         record_type.add(real_type)
         if real_type is None:

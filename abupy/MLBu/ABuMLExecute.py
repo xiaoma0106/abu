@@ -11,7 +11,8 @@ import os
 import matplotlib.cbook as cbook
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy import interp
+# from scipy import interp
+from scipy.interpolate import interp1d
 from sklearn import metrics
 from sklearn import tree
 from sklearn.base import ClusterMixin, clone
@@ -494,8 +495,8 @@ def plot_roc_estimator(estimator, x, y, pos_label=None):
                         0.1301])
         """
 
-        # interp线性插值计算
-        mean_tpr += interp(mean_fpr, fpr, tpr)
+        # interp1d线性插值计算
+        mean_tpr += interp1d(mean_fpr, fpr, tpr)
         # 把第一个值固定0，最后会使用mean_tpr[-1] = 1.0把最后一个固定1.0
         mean_tpr[0] = 0.0
         # 直接使用 sklearn中的metrics.auc计算
